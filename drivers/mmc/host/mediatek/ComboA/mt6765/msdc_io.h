@@ -89,9 +89,39 @@ void msdc_dump_clock_sts(char **buff, unsigned long *size,
 		if (host->hclk_ctl) \
 			clk_disable(host->hclk_ctl); \
 	} while (0)
+#define msdc_clk_prepare_enable(host) \
+	do { \
+		int lock; \
+		lock = spin_is_locked(&host->lock); \
+		if (lock) \
+			spin_unlock(&host->lock); \
+		(void)clk_prepare_enable(host->clk_ctl); \
+		if (host->aes_clk_ctl) \
+			(void)clk_prepare_enable(host->aes_clk_ctl); \
+		if (host->hclk_ctl) \
+			(void)clk_prepare_enable(host->hclk_ctl); \
+		if (lock) \
+			spin_lock(&host->lock); \
+	} while (0)
+#define msdc_clk_disable_unprepare(host) \
+	do { \
+		int lock; \
+		lock = spin_is_locked(&host->lock); \
+		if (lock) \
+			spin_unlock(&host->lock); \
+		clk_disable_unprepare(host->clk_ctl); \
+		if (host->aes_clk_ctl) \
+			clk_disable_unprepare(host->aes_clk_ctl); \
+		if (host->hclk_ctl) \
+			clk_disable_unprepare(host->hclk_ctl); \
+		if (lock) \
+			spin_lock(&host->lock); \
+	} while (0)
 #else
 #define msdc_clk_enable(host)
 #define msdc_clk_disable(host)
+#define msdc_clk_prepare_enable(host)
+#define msdc_clk_disable_unprepare(host)
 #endif
 
 int msdc_get_ccf_clk_pointer(struct platform_device *pdev,
