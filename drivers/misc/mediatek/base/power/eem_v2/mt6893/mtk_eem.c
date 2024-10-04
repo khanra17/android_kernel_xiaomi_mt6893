@@ -256,6 +256,7 @@ static int eem_aee_log_cur_volt(struct eem_det *det)
 			cur_oft, aee_log_buf, str_len + 1);
 		cur_oft += str_len;
 	}
+	
 
 	for (i = EEM_PHASE_INIT020; (i <= EEM_PHASE_INIT021) &&
 		(init2dump == 0); i++) {
