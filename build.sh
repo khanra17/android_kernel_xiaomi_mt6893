@@ -123,7 +123,7 @@ build_boot_img() {
         return 1
     fi
 
-    local boot_image_name="boot_$(date +%Y%m%d_%H%M%S).img"
+    local boot_image_name="boot_ksu_$(date +%Y%m%d_%H%M%S).img"
 
     log "Unpacking boot image..."
     ./magiskboot unpack stock_boot.img || return 1
